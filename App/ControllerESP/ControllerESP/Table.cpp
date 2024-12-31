@@ -33,7 +33,6 @@ void Table::setCurrentGameMode(GameMode* mode) {
       else if(mode->getType() == GameModeType::SledBob){
         matrix.clearDisplay();
         this->clearLeds();
-        matrix.sledBobStartUp();
         this->bootUp();
 
         this->getCupSet("Left").getSideCups(0).setActivated(false);
@@ -44,7 +43,6 @@ void Table::setCurrentGameMode(GameMode* mode) {
 
         this->getCupSet("Right").setBothSideCupsActivated(false);
         this->getCupSet("Left").setBothSideCupsActivated(false);   
-        matrix.clearDisplay();
     }
     currentGameMode = mode;
   }
@@ -215,8 +213,6 @@ void Table::startUp() {
 
 
 
-
-
 void Table::bootUp() {
     const unsigned long pulseDuration = 5000; 
     const unsigned long startTime = millis();
@@ -245,9 +241,6 @@ void Table::bootUp() {
     }
     FastLED.show();
 }
-
-
-
 
 
 

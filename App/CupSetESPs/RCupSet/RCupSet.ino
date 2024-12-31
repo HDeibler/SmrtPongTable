@@ -267,10 +267,6 @@ void updateLEDsFromCommand(String command) {
         runBeerBallStartUp();
         return;
     }
-    else if (command == "lvc"){
-        lvc();
-        return;
-    }
     else if (command == "LS") {
         handleLastSensor();
     } 
@@ -443,7 +439,7 @@ void sensorTask(void * pvParameters) {
         // Append the filtered IR sensor value with a distinct identifier
         snprintf(sensorData + dataLength, SENSOR_DATA_BUFFER_SIZE - dataLength, "IR:%d", irSensorValueFiltered);
         if(!isStartupAnimationRunning){
-          MySerial2.print('R');
+          MySerial2.print('L');
           MySerial2.println(sensorData);
    
         }
@@ -476,31 +472,6 @@ void runStartupAnimation() {
 
        safeFastLEDShow();
     }
-}
-
-void lvc() {
-  const int animationDuration = 30000;  // Total duration of the animation in milliseconds
-  const int pulseDuration = 10000;       // Duration of one pulse cycle (fade in and out) in milliseconds
-  const CRGB targetColor = CRGB::Blue;  // Target color for the fade-in
-
-  unsigned long startTime = millis();
-  while (millis() - startTime < animationDuration) {
-    unsigned long currentTime = millis() - startTime;
-    int pulsePhase = currentTime % pulseDuration;
-    float fadeAmount = (pulsePhase < pulseDuration / 2) ? (float)pulsePhase / (pulseDuration / 2) : 1.0f - (float)(pulsePhase - pulseDuration / 2) / (pulseDuration / 2);
-
-    CRGB fadedColor = targetColor;
-    fadedColor.fadeToBlackBy(255 * (1 - fadeAmount)); 
-
-    // Apply faded color to all LEDs
-    for (int podIndex = 0; podIndex < NUM_PODS; ++podIndex) {
-      fill_solid(pods[podIndex].leds, NUM_LEDS_PER_POD, fadedColor);
-    }
-    // Control the update rate for a smoother animation
-    esp_task_wdt_reset();  // Keep the watchdog happy :)
-
-    safeFastLEDShow();
-  }
 }
 
 

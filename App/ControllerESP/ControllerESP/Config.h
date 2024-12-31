@@ -28,7 +28,7 @@
 
 //BBall pod definitions
 #define NUM_LEDS_PER_STRIP 16
-#define BRIGHTNESS  80
+#define BRIGHTNESS  40
 #define LED_TYPE    WS2812B
 #define COLOR_ORDER GRB
 extern CRGB leds1[NUM_LEDS_PER_STRIP];

@@ -1,0 +1,1 @@
+16 NeoPixel ring Holder with strap holes by paulmsam on Thingiverse: https://www.thingiverse.com/thing:2610761

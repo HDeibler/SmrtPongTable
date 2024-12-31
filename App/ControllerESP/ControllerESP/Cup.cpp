@@ -17,13 +17,10 @@ bool Cup::isCupPresent() {
 }
 
 void Cup::updateState(int sensorValue, char side, int index) {
-    int threshold = 10; 
+    int threshold = 15; 
     const int debounceThreshold = 5;
     if(side == 'R' && index == 4){
-      threshold = 10;
-    }
-        if(side == 'L' && index == 0){
-      threshold = 3;
+      threshold = 6;
     }
 
     filteredValue = alpha * sensorValue + (1 - alpha) * filteredValue;
@@ -87,18 +84,18 @@ bool Cup::isCupAndMiddleSensorActiveCup(){
 
 
 void Cup::UpdateSideCupSensors(int sensorValue, int index, String side){
-    int threshold = 105; 
-    const int debounceThreshold = 7;
+    int threshold = 110; 
+    const int debounceThreshold = 8;
     if(side == "Left" && index == 1){
-      threshold = 190;
+      threshold = 185;
     }
     else if((side == "Left" && index == 0) || (side == "Right" && index == 1 )){
-      threshold = 115;
+      threshold = 125;
     }
 
 
     if(side == "Right" && index == 0){
-      threshold = 115;
+      threshold = 110;
     }
     filteredValue = alpha * sensorValue + (1 - alpha) * filteredValue;
 
@@ -113,11 +110,11 @@ void Cup::UpdateSideCupSensors(int sensorValue, int index, String side){
         isPresent = false;
     }
 }
-void Cup::setRecentlyActive(bool Active) {
-    if (Active) {
+void Cup::setRecentlyActive(bool isActive) {
+    if (isActive) {
         lastActiveTime = millis();
     }
-    wasRecentlyActive = Active;
+    wasRecentlyActive = isActive;
 }
 
 bool Cup::wasActive() {
@@ -125,13 +122,15 @@ bool Cup::wasActive() {
 }
 
 unsigned long Cup::getTimeSinceLastActive() {
-    return millis() - lastActiveTime;
+    if (!wasRecentlyActive) {
+        return millis() - lastActiveTime;
+    }
+    return 0;
 }
 
 void Cup::resetTimeSinceLastActive() {
     lastActiveTime = millis();
     wasRecentlyActive = false;
-    isPermanentlyRemoved = false;
 }
 
 void Cup::markAsRemoved() {

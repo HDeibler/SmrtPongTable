@@ -36,7 +36,6 @@ public:
     void clearLeds();
     void startUp();
     void bootUp();
-
 };
 
 #endif 

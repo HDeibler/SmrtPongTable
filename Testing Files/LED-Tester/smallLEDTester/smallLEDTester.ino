@@ -1,14 +1,14 @@
 #include <FastLED.h>
 
-#define NUM_LEDS 1
-#define DATA_PIN 3
+#define NUM_LEDS 4
+#define DATA_PIN 33
 #define LED_TYPE WS2812B
 #define COLOR_ORDER GRB
 CRGB leds[NUM_LEDS];
 
 void setup() {
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
-} 
+}
 
 void loop() {
   // Turn LEDs on with a color

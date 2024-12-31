@@ -62,7 +62,7 @@ void LedMatrix::displayBorders(CupSet& leftSet, CupSet& rightSet) {
 CRGB LedMatrix::determineBorderColor(int x, int y, CupSet& leftSet, CupSet& rightSet) {
     bool isLeftBox = x < MATRIX_WIDTH / 2;
     BeerPongState state = isLeftBox ? leftSet.getSpecialState() : rightSet.getSpecialState();
-    bool alternatePixel = (x + y + int(globalFadePhase * 2)) % 2 == 0; 
+    bool alternatePixel = (x + y + int(globalFadePhase * 2)) % 2 == 0; // Alternation influenced by globalFadePhase
 
     switch (state) {
         case CS_WestVirginia:
@@ -197,47 +197,34 @@ void LedMatrix::beerBallStartUp() {
     }
 }
 
-void LedMatrix::sledBobStartUp() {
-    int NUM_FRAMES = 80;
-    int frameSize = FRAME_WIDTH * FRAME_HEIGHT; 
-
-    for(int currentFrame = 0; currentFrame < NUM_FRAMES; ++currentFrame) {
-        int startIndex = currentFrame * FRAME_WIDTH; // Calculate start index of the current frame within the large array
-
-        for (int y = 0; y < FRAME_HEIGHT; ++y) {
-            for (int x = 0; x < FRAME_WIDTH; ++x) {
-                int index = startIndex + (y * FRAME_WIDTH * NUM_FRAMES) + x; // Calculate the correct index within the large array
-                uint32_t colorValue = pgm_read_dword_near(&(sledbob[index])); 
-                uint8_t red = (colorValue >> 24) & 0xFF;
-                uint8_t green = (colorValue >> 16) & 0xFF;
-                uint8_t blue = (colorValue >> 8) & 0xFF;
-
-                matrix->drawPixel(x, y, CRGB(red, green, blue));
-            }
-        }
-        FastLED.show(); 
-        delay(100); 
-    }
-}
 
 
 
 
 
-void LedMatrix::displayFromArray() {
-   
+
+
+
+
+
+void LedMatrix::LedMatrix::displayFromArray() {
+//image tester
+
+/*
     for (int y = 0; y < MATRIX_HEIGHT; y++) {
         for (int x = 0; x < MATRIX_WIDTH; x++) {
-            uint32_t colorValue = pgm_read_dword_near(&lvc[x + y * MATRIX_WIDTH]);  
+            uint32_t colorValue = pgm_read_dword(&(pixil_frame_0[x + y * MATRIX_WIDTH]));
+            // Extract RGB components from RGBA
             uint8_t red = (colorValue >> 24) & 0xFF;
             uint8_t green = (colorValue >> 16) & 0xFF;
             uint8_t blue = (colorValue >> 8) & 0xFF;
+            // Update the matrix pixel
             matrix->drawPixel(x, y, CRGB(red, green, blue));
         }
     }
-    FastLED.show(); 
+    FastLED.show();
+*/
 }
-
 
 
 

@@ -223,17 +223,12 @@ void updateLEDsFromCommand(String command) {
   } else if (command == "startup") {
     runStartupAnimation();
     return;
-  } 
-  else if (command == "lvc") {
-    lvc();
-    return;
-  }
-  else if (command == "beerball") {
+  } else if (command == "beerball") {
     runBeerBallStartUp();
     return;
   } else if (command == "LS") {
     handleLastSensor();
-  } else if (command == "BBB") {
+  } else if (command == "BBR") {
     handleBeerBall();
   } else if (command == "Winner") {
     updateAnimation("Winner");
@@ -408,34 +403,9 @@ void sensorTask(void* pvParameters) {
   }
 }
 
-void lvc() {
-  const int animationDuration = 30000;  // Total duration of the animation in milliseconds
-  const int pulseDuration = 10000;       // Duration of one pulse cycle (fade in and out) in milliseconds
-  const CRGB targetColor = CRGB::Blue;  // Target color for the fade-in
-
-  unsigned long startTime = millis();
-  while (millis() - startTime < animationDuration) {
-    unsigned long currentTime = millis() - startTime;
-    int pulsePhase = currentTime % pulseDuration;
-    float fadeAmount = (pulsePhase < pulseDuration / 2) ? (float)pulsePhase / (pulseDuration / 2) : 1.0f - (float)(pulsePhase - pulseDuration / 2) / (pulseDuration / 2);
-
-    CRGB fadedColor = targetColor;
-    fadedColor.fadeToBlackBy(255 * (1 - fadeAmount)); 
-
-    // Apply faded color to all LEDs
-    for (int podIndex = 0; podIndex < NUM_PODS; ++podIndex) {
-      fill_solid(pods[podIndex].leds, NUM_LEDS_PER_POD, fadedColor);
-    }
-    // Control the update rate for a smoother animation
-    esp_task_wdt_reset();  // Keep the watchdog happy :)
-
-    safeFastLEDShow();
-  }
-}
-
 void runStartupAnimation() {
   const int animationDuration = 15000;  // Total duration of the animation in milliseconds
-  const int pulseDuration = 5000;       // Duration of one pulse cycle (fade in and out) in milliseconds
+  const int pulseDuration = 3000;       // Duration of one pulse cycle (fade in and out) in milliseconds
   const CRGB targetColor = CRGB::Blue;  // Target color for the fade-in
 
   unsigned long startTime = millis();

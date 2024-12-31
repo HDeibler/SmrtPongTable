@@ -66,7 +66,7 @@ String BeerBall::createLEDCommands(Table& pongTable) {
     // Only the right side has commands; delimiter at the start
     ledCommands = "|" + rightCommands;
   }
-
+  // If both are empty, ledCommands remains empty, and no commands are sent
   return ledCommands;
 }
 

@@ -4,7 +4,6 @@
 #include "BeerBall.h"
 #include "Config.h"
 #include "SledBob.h"
-#include "LedMatrix.h"
 
 
 #define DEBOUNCE_MS 200
@@ -14,7 +13,6 @@ Table pongTable;
 BeerPong beerPongMode;
 BeerBall beerBallMode;
 SledBob sledBobMode;
-
 
 // State Variables
 bool pongMode = true;
@@ -67,19 +65,14 @@ void setup() {
   pinMode(GAME_MODE_PIN_1, INPUT_PULLUP);
   pinMode(GAME_MODE_PIN_2, INPUT_PULLUP);
   pinMode(GAME_MODE_PIN_3, INPUT_PULLUP);
-  
 
 }
 
 void loop() {
-
-  
-
   if (!startup) {
     setupGameMode();
     startup = true;
   }
-
 
   // Check for button presses to change game modes
   if (millis() - lastButtonPressTime > DEBOUNCE_MS) {
@@ -114,9 +107,6 @@ void loop() {
     if (MySerial2.available()) {
       String dataRight = MySerial2.readStringUntil('\n');
       dataRight = dataRight.substring(1); // Remove the first character 'R'
- 
-  
-
       pongTable.updateCurrentGame(pongTable, dataRight, 'R');
       stateRightUpdated = true;
 
@@ -191,7 +181,6 @@ void loop() {
     }
 
   }
-
 }
 
 void setupGameMode() {
@@ -231,7 +220,7 @@ void switchGameMode(String mode) {
     beerBall = false;
     MySerial1.println("startup");
     MySerial2.println("startup");
-    pongTable.setCurrentGameMode(&sledBobMode);
+    pongTable.setCurrentGameMode( & sledBobMode);
     sledBob = true;
   }
 

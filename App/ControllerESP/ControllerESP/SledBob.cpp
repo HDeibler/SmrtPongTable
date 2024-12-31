@@ -116,34 +116,28 @@ void SledBob::updateCupPresenceStatus(Table& table, String side) {
         CupSet& cupSet = table.getCupSet(side);
         if (!cupSet.areBothSideCupsActivated()) return;
 
-        bool anyCupRemoved = false;  // Flag to check if any cup is marked as removed
-
         for (int i = 0; i < cupSet.getNumCups(); ++i) {
+            unsigned long currentTime = millis();
             Cup& cup = cupSet.getCup(i);
             bool isPresent = cup.isCupPresent();
 
-            // Check only for cups that were previously active (present) and now are not present.
             if (!isPresent && cup.wasActive()) {
-                unsigned long elapsedNotPresentTime = cup.getTimeSinceLastActive();
-                if (elapsedNotPresentTime > 2000) {
-                    // This cup was present, now it's not, and it's been so for more than 5 seconds.
+                unsigned long elapsedNotPresentTime = currentTime - cup.getTimeSinceLastActive();
+            
+                if (elapsedNotPresentTime > 5000) {
                     cup.markAsRemoved();
-                    anyCupRemoved = true;
-                    Serial.print(cup.getName());
-                    Serial.println(" marked as removed.");
-                    // No need to call setRecentlyActive(false) here since we want to remember it was active for this logic to work.
+                    Serial.println(cup.getName());
+                    roundEnded=true;
+                    cupSet.setWinner(true);
+                    cup.resetTimeSinceLastActive();
+                    endRoundAnimations(table, side);
+                    break;
                 }
             } else if (isPresent) {
-                // If the cup is currently present, ensure it's marked as recently active.
+                // If the cup is present, reset its not present timer and state
+                cup.resetTimeSinceLastActive();
                 cup.setRecentlyActive(true);
             }
-        }
-
-        if (anyCupRemoved) {
-            // A cup that was present has been removed, which may affect the game state.
-            roundEnded = true;
-            cupSet.setWinner(true);
-            endRoundAnimations(table, side);
         }
     } catch (const std::exception& e) {
         Serial.print("Exception caught in updateCupPresenceStatus: ");
@@ -153,10 +147,11 @@ void SledBob::updateCupPresenceStatus(Table& table, String side) {
     }
 }
 
-void SledBob::endRoundAnimations(Table& table, String side){
+void SledBob::endRoundAnimations(Table& table, String side) 
   pulseSideCups(table);
 
   if (table.getCupSet("Left").areBothSideCupsRemoved() && table.getCupSet("Right").areBothSideCupsRemoved()) {
+          
           table.getCupSet("Left").setBothSideCupsActivated(false);
           table.getCupSet("Right").setBothSideCupsActivated(false);
 
@@ -167,14 +162,7 @@ void SledBob::endRoundAnimations(Table& table, String side){
 
           table.getCupSet("Left").setWinner(false);
           table.getCupSet("Right").setWinner(false);
-
-          for(int i = 0; i < 6; i++){
-          table.getCupSet("Right").getCup(i).resetTimeSinceLastActive();
-          table.getCupSet("Left").getCup(i).resetTimeSinceLastActive();
-          
           roundEnded = false;
-
-          }
       }
   }
 

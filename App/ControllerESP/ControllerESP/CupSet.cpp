@@ -114,5 +114,3 @@ bool CupSet::areBothSideCupsRemoved(){
 
 
 
-
-
