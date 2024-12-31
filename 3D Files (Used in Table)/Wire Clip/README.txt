@@ -1,0 +1,1 @@
+6mm wire guide clip by NilsR on Thingiverse: https://www.thingiverse.com/thing:205775

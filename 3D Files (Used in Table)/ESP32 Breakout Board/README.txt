@@ -1,0 +1,1 @@
+ESP32 4x6cm PCB mount by tray_withdraw on Thingiverse: https://www.thingiverse.com/thing:3015337
